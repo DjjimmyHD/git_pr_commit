@@ -2,16 +2,29 @@ import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
+import fetch from "node-fetch"
+
 const app =  express()
 
-app.use(helmet())
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-app.use(morgan(process.env.NODE_ENV !== 'production' ? 'dev' : 'combined'))
-app.use(cors({origin: true, credentials: true}))
+export default express()
+  .use(helmet())
+  .use(express.json())
+  .use(express.urlencoded({ extended: false }))
+  .use(morgan(process.env.NODE_ENV !== 'production' ? 'dev' : 'combined'))
+  .use(cors({ origin: true, credentials: true }))
 
-app.use(notFound)
-app.use(errorHandler)
+  .get('/', (req: Request, res: Response) =>
+    res.send('HEY WELCOME TO MY SERVER 🥳')
+  )
+  .get('/test', (req: Request, res: Response) => {
+    let protectedUrl:string = 'https://api.github.com/'
+   fetch(protectedUrl)
+   .then(data => data.json())
+   .then(data => res.send(data))
+   .catch(error => {
+     console.error('Error:', error)
+   })
+})
 
 function notFound( request: Request,
     response: Response,
@@ -29,4 +42,3 @@ function errorHandler(  error: Error,
   response.status(500).send({error: error.message, stack, url: request.originalUrl})
 }
 
-module.exports = app
