@@ -1,3 +1,4 @@
+import { response } from "express";
 import fetch, { Response } from "node-fetch";
 
 const headers = {
@@ -9,7 +10,15 @@ export const getPulls = async (owner:string,repo:string): Promise<unknown> => {
   return fetch(`https://api.github.com/repos/${owner}/${repo}/pulls`, {
     headers,
   })
-  .then((res:Response) => res.json())
+
+  .then((res:Response) => {
+    if(res.ok){
+    return res.json()
+    }
+    else{
+      return  Promise.reject(new Error(`Http Error: ${res.status} Either there are no open PRs or your params are wrong please try again`))
+    }
+  })
   .then(openPullArray => {
 
 const fetchCommits = async (url: string): Promise<unknown> => {
@@ -39,5 +48,6 @@ const findAllTheCommits = async () => {
 
     return formattedResponse
     })
+    .catch()
 
 };

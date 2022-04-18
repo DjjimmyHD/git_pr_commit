@@ -1,7 +1,6 @@
 import supertest from 'supertest';
 import app from '../app'
 
-
 describe('Should get a 200 response on /', function(): void {
   it('gets the test endpoint',function(done) {
     supertest(app)
@@ -18,3 +17,5 @@ describe('Checks for github api being up/', function(): void {
       .expect(200, done);
   });
 });
+
+
