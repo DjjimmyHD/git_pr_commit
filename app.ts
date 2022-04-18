@@ -4,7 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 import fetch from "node-fetch"
 
-const app =  express()
+import pullRouter from "./routes/pullRequests"
 
 export default express()
   .use(helmet())
@@ -12,7 +12,7 @@ export default express()
   .use(express.urlencoded({ extended: false }))
   .use(morgan(process.env.NODE_ENV !== 'production' ? 'dev' : 'combined'))
   .use(cors({ origin: true, credentials: true }))
-
+  .use("/api/commits", pullRouter)
   .get('/', (req: Request, res: Response) =>
     res.send('HEY WELCOME TO MY SERVER 🥳')
   )
